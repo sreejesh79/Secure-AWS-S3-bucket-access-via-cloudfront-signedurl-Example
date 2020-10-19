@@ -6,13 +6,13 @@ const privateKey = fs.readFileSync('./pk.pem', {encoding: 'utf8'});
 const Signer = new AWS.CloudFront.Signer(process.env.PUBLIC_KEY, privateKey) ;
 const getSignedUrl = async (event) => {
   console.log(event);
-    const mediaUrl = event.headers["object-key"];
-    if(!mediaUrl){
+    const filepath = event.body.key;
+    if(!filepath){
       return "key is missing in header";
     }
     const cloudUrl = process.env.CLOUD_URL;
     const signingParams = {
-        url: `https://${cloudUrl}.cloudfront.net/${mediaUrl}`, 
+        url: `https://${cloudUrl}.cloudfront.net/${filepath}`, 
         expires: Math.round(new Date().getTime()/1000) + 1200
       }
       
